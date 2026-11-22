@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IFL Basketbol Turnuva Ağacı</title>
+    <style>
+        :root {
+            --bg-color: #0b0b0b;
+            --card-bg: rgba(24, 24, 24, 0.9);
+            --border-color: rgba(255, 255, 255, 0.12);
+            --gold: #ff6a00;
+            --gold-glow: rgba(255, 106, 0, 0.35);
+            --text-main: #ffffff;
+            --text-muted: #b0b0b0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            background-image: radial-gradient(circle at 50% 0%, rgba(255, 106, 0, 0.14) 0%, var(--bg-color) 65%);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            text-align: center;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(255, 106, 0, 0.25);
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 10px;
+        }
+
+        .tournament-container {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: center;
+            max-width: 1000px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .round-column {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            flex: 1;
+            min-width: 290px;
+            max-width: 420px;
+            align-items: center;
+        }
+
+        .round-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .match-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .match-label {
+            font-size: 0.8rem;
+            color: var(--gold);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-left: 4px;
+            text-transform: uppercase;
+        }
+
+        .match-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 100%;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .match-card:hover {
+            border-color: rgba(255, 106, 0, 0.45);
+            transform: translateY(-2px);
+        }
+
+        .match-card.final-card {
+            border: 1px solid var(--gold);
+            box-shadow: 0 0 25px var(--gold-glow);
+        }
+
+        .match-header {
+            background: rgba(0, 0, 0, 0.28);
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            letter-spacing: 0.5px;
+        }
+
+        .team-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: background 0.2s ease;
+        }
+
+        .team-row.winner-row {
+            background: rgba(255, 106, 0, 0.11);
+            font-weight: 600;
+        }
+
+        .team-row:not(:last-child) {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .team-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .winner-badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #ff8529;
+            border: 1px solid rgba(255, 106, 0, 0.5);
+            background: rgba(255, 106, 0, 0.14);
+            padding: 1px 5px;
+            border-radius: 4px;
+            letter-spacing: 0.4px;
+        }
+
+        .score-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .team-score {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            min-width: 32px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .team-score.has-score {
+            border-color: var(--gold);
+            color: #ff8529;
+            background: rgba(255, 106, 0, 0.1);
+        }
+
+        .match-footer-referee {
+            background: rgba(0, 0, 0, 0.35);
+            border-top: 1px solid var(--border-color);
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .match-footer-referee span {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>IFL BASKETBOL TURNUVA AĞACI</h1>
+
+    <div class="tournament-container" id="tournamentTree"></div>
+
+    <script>
+        var m_data = {
+            'SF1':   { takim1: '12-B', takim2: '9-B', skor: '-', tarih: '23 Kasım Pazartesi', hakem: '-' },
+            'SF2':   { takim1: '10-A', takim2: '9-A', skor: '-', tarih: '24 Kasım Salı', hakem: '-' },
+            'FINAL': { takim1: 'İlk Maçın Galibi', takim2: 'İkinci Maçın Galibi', skor: '-', tarih: '26 Kasım Perşembe', hakem: '-' }
+        };
+
+        function parsePair(pairStr, index) {
+            if (!pairStr || pairStr === '-') return '-';
+            var parts = String(pairStr).split('-');
+            if (parts.length >= 2) {
+                var val = parts[index].trim();
+                return val !== '' ? val : '-';
+            }
+            return '-';
+        }
+
+        function createMatchHTML(code, labelText, isFinal) {
+            var data = m_data[code] || { takim1: '-', takim2: '-', skor: '-', tarih: '-', hakem: '-' };
+            var s1 = parsePair(data.skor, 0);
+            var s2 = parsePair(data.skor, 1);
+
+            var s1Class = s1 !== '-' ? 'team-score has-score' : 'team-score';
+            var s2Class = s2 !== '-' ? 'team-score has-score' : 'team-score';
+            var refereeName = data.hakem && data.hakem !== '-' ? data.hakem : 'Atanmadı';
+
+            var numS1 = parseFloat(s1);
+            var numS2 = parseFloat(s2);
+            var hasValidScores = s1 !== '-' && s2 !== '-' && !isNaN(numS1) && !isNaN(numS2);
+
+            var team1Wins = hasValidScores && numS1 > numS2;
+            var team2Wins = hasValidScores && numS2 > numS1;
+
+            var badgeLabel = isFinal ? 'ŞAMPİYON' : 'TUR';
+            var win1Badge = team1Wins ? '<span class="winner-badge">' + badgeLabel + '</span>' : '';
+            var win2Badge = team2Wins ? '<span class="winner-badge">' + badgeLabel + '</span>' : '';
+
+            return (
+                '<div class="match-wrapper">' +
+                    '<div class="match-label">' + labelText + '</div>' +
+                    '<div class="match-card ' + (isFinal ? 'final-card' : '') + '">' +
+                        '<div class="match-header">' + (data.tarih || code) + '</div>' +
+                        '<div class="team-row ' + (team1Wins ? 'winner-row' : '') + '">' +
+                            '<span class="team-name">' + (data.takim1 || '-') + ' ' + win1Badge + '</span>' +
+                            '<span class="score-group"><span class="' + s1Class + '">' + s1 + '</span></span>' +
+                        '</div>' +
+                        '<div class="team-row ' + (team2Wins ? 'winner-row' : '') + '">' +
+                            '<span class="team-name">' + (data.takim2 || '-') + ' ' + win2Badge + '</span>' +
+                            '<span class="score-group"><span class="' + s2Class + '">' + s2 + '</span></span>' +
+                        '</div>' +
+                        '<div class="match-footer-referee">Hakem: <span>' + refereeName + '</span></div>' +
+                    '</div>' +
+                '</div>'
+            );
+        }
+
+        function renderTree() {
+            var container = document.getElementById('tournamentTree');
+            if (!container) return;
+
+            container.innerHTML =
+                '<div class="round-column">' +
+                    '<div class="round-title">Yarı Finaller</div>' +
+                    createMatchHTML('SF1', '1. Yarı Final', false) +
+                    createMatchHTML('SF2', '2. Yarı Final', false) +
+                '</div>' +
+                '<div class="round-column">' +
+                    '<div class="round-title">Final</div>' +
+                    createMatchHTML('FINAL', 'Büyük Final', true) +
+                '</div>';
+        }
+
+        document.addEventListener('DOMContentLoaded', renderTree);
+        renderTree();
+    </script>
+</body>
+</html>
